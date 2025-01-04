@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:729165556765:android:92df72e2c860a94ebeaaf4",
+        "android_client_info": {
+          "package_name": "campus.lif"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBckWZHLNW1APWgEp5fVUecjX8E4TQYi-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:729165556765:android:66d126be0eda27bebeaaf4",
         "android_client_info": {
           "package_name": "campus.life"
