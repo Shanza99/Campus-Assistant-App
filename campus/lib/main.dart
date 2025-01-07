@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Ensure this path is correct
-import 'class_schdule.dart'; // Import the Class Schedule screen
-import 'event.dart'; // Import the Event Notifications screen
-import 'assignment.dart'; // Import the Assignment screen
-import 'study.dart';
-import 'feedback.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
+import 'dashboard.dart';
+import 'auth_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -17,133 +15,34 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Firebase Auth',
+      title: 'Student Portal',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AuthWrapper(),
+      home: FirebaseAuth.instance.currentUser == null ? AuthScreen() : Dashboard(),
     );
   }
 }
 
-class AuthWrapper extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
-          final user = snapshot.data;
-          if (user == null) {
-            return AuthScreen();
-          } else {
-            return DashboardScreen();
-          }
-        }
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-}
+class Dashboard extends StatelessWidget {
+  final List<String> sliderImages = [
+    'images/a (1).png',
+    'images/a (2).png',
+    'images/a (3).png',
+    'images/a (4).png',
+    'images/a (5).png',
+    'images/a.png',
+    'images/b.png',
+  ];
 
-class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<User?> signUp(String email, String password) async {
-    try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      return result.user;
-    } catch (e) {
-      print('Sign Up Error: $e');
-      return null;
-    }
-  }
-
-  Future<User?> signIn(String email, String password) async {
-    try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return result.user;
-    } catch (e) {
-      print('Login Error: $e');
-      return null;
-    }
-  }
-
-  Future<void> signOut() async {
-    await _auth.signOut();
-  }
-}
-
-class AuthScreen extends StatefulWidget {
-  @override
-  _AuthScreenState createState() => _AuthScreenState();
-}
-
-class _AuthScreenState extends State<AuthScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
-  String _message = '';
-
-  void _signUp() async {
-    User? user = await _authService.signUp(_emailController.text, _passwordController.text);
-    if (user != null) {
-      setState(() {
-        _message = "Sign Up Successful: ${user.email}";
-      });
-    } else {
-      setState(() {
-        _message = "Sign Up Failed. Please check your email and password.";
-      });
-    }
-  }
-
-  void _signIn() async {
-    User? user = await _authService.signIn(_emailController.text, _passwordController.text);
-    if (user != null) {
-      setState(() {
-        _message = "Login Successful: ${user.email}";
-      });
-    } else {
-      setState(() {
-        _message = "Login Failed. Please check your credentials.";
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Firebase Auth Example'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: _signUp, child: Text('Sign Up')),
-            ElevatedButton(onPressed: _signIn, child: Text('Login')),
-            SizedBox(height: 20),
-            Text(_message, style: TextStyle(color: Colors.red)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DashboardScreen extends StatelessWidget {
-  final AuthService _authService = AuthService();
+  final List<Map<String, dynamic>> dashboardItems = [
+    {'icon': Icons.event, 'label': 'Events', 'route': '/events'},
+    {'icon': Icons.assignment, 'label': 'Assignments', 'route': '/assignments'},
+    {'icon': Icons.schedule, 'label': 'Class Schedule', 'route': '/schedule'},
+    {'icon': Icons.feedback, 'label': 'Feedback', 'route': '/feedback'},
+    {'icon': Icons.group, 'label': 'Study Groups', 'route': '/study-groups'},
+    {'icon': Icons.settings, 'label': 'Settings', 'route': '/settings'},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -154,46 +53,67 @@ class DashboardScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () async {
-              await _authService.signOut();
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AuthScreen()),
+              );
             },
-          )
+          ),
         ],
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(16),
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        children: [
-          _buildCard('Events', Icons.event, Colors.red, () {}),
-          _buildCard('Assignments', Icons.assignment, Colors.blue, () {}),
-          _buildCard('Class Schedule', Icons.schedule, Colors.green, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ClassScheduleScreen()),
-            );
-          }),
-          _buildCard('Feedback', Icons.feedback, Colors.orange, () {}),
-          _buildCard('Study Group', Icons.group, Colors.purple, () {}),
-          _buildCard('Settings', Icons.settings, Colors.teal, () {}),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCard(String title, IconData icon, Color color, VoidCallback onTap) {
-    return Card(
-      color: color.withOpacity(0.8),
-      child: InkWell(
-        onTap: onTap,
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 40, color: Colors.white),
-            SizedBox(height: 10),
-            Text(
-              title,
-              style: TextStyle(color: Colors.white, fontSize: 16),
+            SizedBox(
+              height: 200,
+              child: PageView.builder(
+                itemCount: sliderImages.length,
+                itemBuilder: (context, index) {
+                  return Image.asset(
+                    sliderImages[index],
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: dashboardItems.length,
+                itemBuilder: (context, index) {
+                  final item = dashboardItems[index];
+                  return GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, item['route']),
+                    child: Card(
+                      elevation: 4,
+                      color: Colors.blueAccent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(item['icon'], size: 40, color: Colors.white),
+                          SizedBox(height: 10),
+                          Text(
+                            item['label'],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
