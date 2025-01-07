@@ -37,6 +37,26 @@ This is a Flutter app integrated with Firebase authentication. It allows users t
    
 3. **Various Feature Screens**:
    - Screens like Event Notifications, Assignment Tracker, Class Schedule, Feedback System, and Study Group.
+     
+## UI
+![image](https://github.com/user-attachments/assets/ca376e80-3ed3-4624-94e2-f483a7bdb1c5)
+![WhatsApp Image 2025-01-07 at 20 23 29_fbe0ce70](https://github.com/user-attachments/assets/4a488630-2faf-4920-bab9-22e4035aab41)
+![WhatsApp Image 2025-01-07 at 20 23 10_28c5e65c](https://github.com/user-attachments/assets/97cf3d36-c7a9-4bba-89c8-635c7ec75a12)
+![WhatsApp Image 2025-01-07 at 20 23 27_eb81bbcc](https://github.com/user-attachments/assets/57f9b75e-66f3-4bc2-855e-b1df9f0b67a8)
+![WhatsApp Image 2025-01-07 at 20 23 26_4712a61a](https://github.com/user-attachments/assets/37f6a268-d995-4cb3-abd6-940c5c3ab987)
+![WhatsApp Image 2025-01-07 at 20 23 22_3f463281](https://github.com/user-attachments/assets/94ae229b-0b0d-4bae-a18b-54dbf5855552)
+![WhatsApp Image 2025-01-07 at 20 23 22_13853ce6](https://github.com/user-attachments/assets/04168650-876b-4c29-958e-44b3c88f580a)
+![WhatsApp Image 2025-01-07 at 20 23 21_ff78a311](https://github.com/user-attachments/assets/2f4c934a-0673-4887-bd07-ad0d46847e44)
+![WhatsApp Image 2025-01-07 at 20 23 15_fa0ad259](https://github.com/user-attachments/assets/3fa96df7-29f7-4c09-aa38-b63d82725c8f)
+![WhatsApp Image 2025-01-07 at 20 23 13_d1d1d6db](https://github.com/user-attachments/assets/e6484c47-d178-4a50-b74d-0793498c1929)
+
+
+
+
+
+
+
+
 
 ## How to Use the App
 
