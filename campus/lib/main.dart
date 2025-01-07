@@ -6,6 +6,7 @@ import 'class_schdule.dart'; // Import the Class Schedule screen
 import 'event.dart'; // Import the Event Notifications screen
 import 'assignment.dart'; // Import the Assignment screen
 import 'study.dart';
+import 'feedback.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
