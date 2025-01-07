@@ -186,7 +186,7 @@ class DashboardScreen extends StatelessWidget {
           _buildCard('Feedback', Icons.feedback, Colors.orange, () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FeedbackScreen()),
+              MaterialPageRoute(builder: (context) => FeedbackSystem()),
             );
           }),
           _buildCard('Study Group', Icons.group, Colors.purple, () {
