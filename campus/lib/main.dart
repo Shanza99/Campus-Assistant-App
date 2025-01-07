@@ -168,7 +168,7 @@ class DashboardScreen extends StatelessWidget {
           _buildCard('Events', Icons.event, Colors.red, () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EventScreen()),
+              MaterialPageRoute(builder: (context) => EventNotifications()),
             );
           }),
           _buildCard('Assignments', Icons.assignment, Colors.blue, () {
