@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; // Ensure this path is correct
 import 'class_schdule.dart'; // Import the Class Schedule screen
 import 'event.dart'; // Import the Event Notifications screen
+import 'assignment.dart'; // Import the Assignment screen
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
