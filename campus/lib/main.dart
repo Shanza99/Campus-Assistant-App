@@ -174,7 +174,7 @@ class DashboardScreen extends StatelessWidget {
           _buildCard('Assignments', Icons.assignment, Colors.blue, () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AssignmentScreen()),
+              MaterialPageRoute(builder: (context) => AssignmentTracker()),
             );
           }),
           _buildCard('Class Schedule', Icons.schedule, Colors.green, () {
