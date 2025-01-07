@@ -22,3 +22,12 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.10' // Check for the latest version
     }
 }
+buildscript {
+  repositories {
+    google()
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.google.gms:google-services:4.3.10'
+  }
+}

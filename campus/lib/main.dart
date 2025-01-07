@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; // Ensure this path is correct
+import 'class_schdule.dart'; // Import the Class Schedule screen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,27 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AuthScreen(),
+      home: AuthWrapper(),
+    );
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final user = snapshot.data;
+          if (user == null) {
+            return AuthScreen();
+          } else {
+            return DashboardScreen();
+          }
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 }
@@ -111,6 +132,66 @@ class _AuthScreenState extends State<AuthScreen> {
             ElevatedButton(onPressed: _signIn, child: Text('Login')),
             SizedBox(height: 20),
             Text(_message, style: TextStyle(color: Colors.red)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DashboardScreen extends StatelessWidget {
+  final AuthService _authService = AuthService();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () async {
+              await _authService.signOut();
+            },
+          )
+        ],
+      ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        padding: const EdgeInsets.all(16),
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        children: [
+          _buildCard('Events', Icons.event, Colors.red, () {}),
+          _buildCard('Assignments', Icons.assignment, Colors.blue, () {}),
+          _buildCard('Class Schedule', Icons.schedule, Colors.green, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ClassScheduleScreen()),
+            );
+          }),
+          _buildCard('Feedback', Icons.feedback, Colors.orange, () {}),
+          _buildCard('Study Group', Icons.group, Colors.purple, () {}),
+          _buildCard('Settings', Icons.settings, Colors.teal, () {}),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCard(String title, IconData icon, Color color, VoidCallback onTap) {
+    return Card(
+      color: color.withOpacity(0.8),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: Colors.white),
+            SizedBox(height: 10),
+            Text(
+              title,
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
           ],
         ),
       ),
