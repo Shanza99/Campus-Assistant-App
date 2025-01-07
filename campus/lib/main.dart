@@ -1,12 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:carousel_slider/carousel_slider.dart'; // Added this import
 import 'firebase_options.dart'; // Ensure this path is correct
 import 'class_schdule.dart'; // Import the Class Schedule screen
 import 'event.dart'; // Import the Event Notifications screen
 import 'assignment.dart'; // Import the Assignment screen
 import 'study.dart';
 import 'feedback.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -144,6 +146,11 @@ class _AuthScreenState extends State<AuthScreen> {
 
 class DashboardScreen extends StatelessWidget {
   final AuthService _authService = AuthService();
+  final List<String> imgList = [
+    'https://via.placeholder.com/600x300?text=Image+1',
+    'https://via.placeholder.com/600x300?text=Image+2',
+    'https://via.placeholder.com/600x300?text=Image+3',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -159,43 +166,73 @@ class DashboardScreen extends StatelessWidget {
           )
         ],
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(16),
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+      body: Column(
         children: [
-          _buildCard('Events', Icons.event, Colors.red, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => EventNotifications()),
-            );
-          }),
-          _buildCard('Assignments', Icons.assignment, Colors.blue, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AssignmentTracker()),
-            );
-          }),
-          _buildCard('Class Schedule', Icons.schedule, Colors.green, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ClassScheduleScreen()),
-            );
-          }),
-          _buildCard('Feedback', Icons.feedback, Colors.orange, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FeedbackSystem()),
-            );
-          }),
-          _buildCard('Study Group', Icons.group, Colors.purple, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => StudyScreen()),
-            );
-          }),
-          _buildCard('Settings', Icons.settings, Colors.teal, () {}),
+          // Image Slider Section with white background
+          Container(
+            color: Colors.white, // White background
+            child: CarouselSlider(
+              options: CarouselOptions(
+                autoPlay: true,  // Auto-play the images
+                enlargeCenterPage: true,
+                aspectRatio: 2.0,
+                autoPlayInterval: Duration(seconds: 3), // Change image every 3 seconds
+                autoPlayAnimationDuration: Duration(milliseconds: 800),
+                autoPlayCurve: Curves.easeInOut,
+              ),
+              items: imgList.map((url) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(url, fit: BoxFit.cover, width: 1000),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          // Other content below the image slider
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              padding: const EdgeInsets.all(16),
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              children: [
+                _buildCard('Events', Icons.event, Colors.red, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EventNotifications()),
+                  );
+                }),
+                _buildCard('Assignments', Icons.assignment, Colors.blue, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AssignmentTracker()),
+                  );
+                }),
+                _buildCard('Class Schedule', Icons.schedule, Colors.green, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ClassScheduleScreen()),
+                  );
+                }),
+                _buildCard('Feedback', Icons.feedback, Colors.orange, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FeedbackSystem()),
+                  );
+                }),
+                _buildCard('Study Group', Icons.group, Colors.purple, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ClassScheduleScreen()),
+                  );
+                }),
+                _buildCard('Settings', Icons.settings, Colors.teal, () {}),
+              ],
+            ),
+          ),
         ],
       ),
     );
