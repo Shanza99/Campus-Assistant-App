@@ -61,6 +61,11 @@ This is a Flutter app integrated with Firebase authentication. It allows users t
 
 ## How to Use the App
 
+
+https://github.com/user-attachments/assets/6f395558-1135-4dfa-b3be-28c74fcfb77c
+
+## How to Use the Project
+
 ### Prerequisites
 
 Before running the app, ensure you have the following:
